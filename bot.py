@@ -1,3 +1,20 @@
+import os
+from flask import Flask
+import threading
+
+app = Flask('')
+
+@app.route('/')
+def home():
+    return "Bot is running!"
+
+def run():
+    port = int(os.environ.get('PORT', 8080))
+    app.run(host='0.0.0.0', port=port)
+
+def keep_alive():
+    t = threading.Thread(target=run)
+    t.start()
 import logging
 from telegram import Update
 from telegram.ext import ApplicationBuilder, MessageHandler, ContextTypes, filters
@@ -53,4 +70,6 @@ def main():
     app.run_polling()
 
 if __name__ == '__main__':
-    main()
+    keep_alive()  # Render uchun veb-serverni yoqamiz
+    main()        # Telegram botni ishga tushiramiz
+
